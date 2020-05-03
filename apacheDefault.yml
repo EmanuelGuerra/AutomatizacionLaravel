@@ -1,0 +1,7 @@
+---
+app_user: "www-data"
+http_host: "grupolocal"
+http_conf: "grupolocal.conf"
+http_port: "80"
+disable_default: true
+#ansible_python_interpreter : "/usr/bin/python3"

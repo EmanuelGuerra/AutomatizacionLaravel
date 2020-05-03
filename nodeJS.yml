@@ -1,0 +1,22 @@
+---
+- hosts: localservers
+
+  tasks:
+
+    - name: Registrar distribución de NodeJS
+      shell: 'get_url = -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -'
+      changed_when: false
+
+    - name: Instalar NodeJS
+      become: true
+      apt:
+        name: nodejs
+        state: latest
+        update_cache: yes
+
+    - name: Instalar Webpack Encore assets
+      become: yes
+      npm:
+        name: webpack
+        global: yes
+        state: latest

@@ -1,0 +1,22 @@
+---
+- hosts: webservers
+  become: true
+  become_method: sudo
+  vars:
+    carpeta: /var/www/html/Guerra/
+    user: vagrant
+  tasks:
+    - name: instalar dependencias
+      shell: cd /var/www/ && sudo apt-get install php7.0-xml
+
+    - name: instalar dependencias
+      shell: cd /var/www/ && sudo apt-get install php-xml
+
+    - name: permisos
+      shell: cd /var/www/ && sudo chmod 777 html
+  
+    - name: crear proyecto laravel
+      shell: cd /var/www/html/ && composer create-project laravel/laravel MiProyecto
+
+    - name: levantar proyecto
+      shell: cd /var/www/html/MiProyecto/ && php artisan serve --host=192.168.0.2 --port=9090

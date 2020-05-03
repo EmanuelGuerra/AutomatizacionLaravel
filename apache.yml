@@ -1,0 +1,28 @@
+---
+- hosts: webservers
+  become: true
+  vars_files:
+    - plantillas/apacheDefault.yml
+
+  tasks:
+    - name: Instalar los pre-requisitos
+      apt: name={{ item }} update_cache=yes state=latest force_apt_get=yes
+      loop: [ 'aptitude' ]
+
+    - name: Instalar Apache
+      apt: name=apache2 update_cache=yes state=latest
+
+    - name: Desactivar el sitio por default de Apache
+      shell: /usr/sbin/a2dissite 000-default.conf
+      when: disable_default
+
+    - name: Agregando Apache virtualHost
+      template:
+        src: "plantillas/apache.conf.j2"
+        dest: "/etc/apache2/sites-available/{{ http_conf }}"
+   
+  handlers:
+    - name: Reiniciar Apache
+      service:
+        name: apache2
+        state: restarted---

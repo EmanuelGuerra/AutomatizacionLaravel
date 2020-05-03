@@ -1,0 +1,33 @@
+---
+- hosts: webservers
+  become: true
+
+  vars:
+    sudo: yes
+    db_user: roor
+    db_name: crud
+    remote_user: root
+    db_password: root
+    become_user: root
+
+  tasks:
+  - name: actualizar requisitos
+    apt: name={{ item }} update_cache=true state=latest
+    with_items:
+    - bash
+    - openssl
+    - libssl-dev
+    - libssl-doc
+    tags: packages
+
+  - name: Instalar PostgreSQL
+    apt: name={{ item }} update_cache=true state=latest
+    with_items:
+    - postgresql
+    - postgresql-contrib
+    - libpq-dev
+    - python-psycopg2
+    tags: packages
+
+  - name: Asegurando que el servicio de PostgreSQL se active
+    service: name=postgresql state=started enabled=yes
